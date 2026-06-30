@@ -426,8 +426,8 @@ O₂ = ½ H₂ (стехиометрическое соотношение).
     ├── display.h / display.cpp       # TFT-дисплей
     ├── current_sensor.h / .cpp       # INA226/INA219/ACS712
     ├── temp_sensor.h / .cpp          # DS18B20/DHT22/NTC
-    └── tilt_sensor.h / .cpp          # MPU6050/ADXL345
-
+    ├── tilt_sensor.h / .cpp          # MPU6050/ADXL345
+    └── globals.h / .cpp              # Переменные
 ---
 
 ## Добавление новых датчиков
