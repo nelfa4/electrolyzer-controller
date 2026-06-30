@@ -1,5 +1,6 @@
-#include "leds.h"
 #include <Arduino.h>
+#include "leds.h"
+#include "globals.h"
 
 #ifdef USE_LEDS
 
@@ -9,8 +10,7 @@ void leds_init() {
   ledcWrite(1, 0);
 }
 
-void leds_update(unsigned long now, float currentPWM,
-                 bool powerOn, bool tiltShutdown, float temperature) {
+void leds_update(unsigned long now) {
   uint8_t brightness = 0;
 
   if (!powerOn) {
@@ -18,7 +18,7 @@ void leds_update(unsigned long now, float currentPWM,
   } else if (tiltShutdown) {
     brightness = ((now / 167) % 2) ? 255 : 0;
   }
-  #ifdef TEMP_MAX
+  #ifdef TEMP_CONTROL_ENABLED
   else if (temperature >= TEMP_MAX) {
     brightness = ((now / 167) % 2) ? 255 : 0;
   }

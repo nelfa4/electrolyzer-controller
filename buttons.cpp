@@ -1,9 +1,6 @@
-#include "buttons.h"
 #include <Arduino.h>
-
-bool powerOn = false;
-bool powerSave = false;
-float targetPWM = 0;
+#include "buttons.h"
+#include "globals.h"
 
 static bool lastPower = HIGH, lastSave = HIGH;
 static unsigned long dbPower = 0, dbSave = 0;
@@ -17,7 +14,6 @@ void buttons_read(unsigned long now) {
   bool rPower = digitalRead(PIN_BUTTON_POWER);
   bool rSave  = digitalRead(PIN_BUTTON_SAVE);
 
-  // Кнопка ВКЛ/ВЫКЛ (она же СТОП)
   if (rPower != lastPower && now - dbPower > 50) {
     dbPower = now;
     if (rPower == LOW) {
@@ -31,7 +27,6 @@ void buttons_read(unsigned long now) {
   }
   lastPower = rPower;
 
-  // Кнопка Power Save
   if (rSave != lastSave && now - dbSave > 50) {
     dbSave = now;
     if (rSave == LOW && powerOn) {

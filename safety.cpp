@@ -1,22 +1,20 @@
-#include "safety.h"
-#include "tilt_sensor.h"
 #include <Arduino.h>
+#include "safety.h"
+#include "globals.h"
+#include "tilt_sensor.h"
 
-#if defined(TILT_SENSOR_MPU6050) || defined(TILT_SENSOR_ADXL345)
 static bool tiltActive = false;
 static unsigned long tiltStart = 0;
-#endif
 
 void safety_init() {
-  tilt_sensor_init();
+  #if defined(TILT_SENSOR_MPU6050) || defined(TILT_SENSOR_ADXL345)
+    tilt_sensor_init();
+  #endif
 }
 
-void safety_check(unsigned long now, float temperature,
-                  bool powerOn, bool powerSave,
-                  bool &tiltShutdown, float &targetPWM) {
+void safety_check(unsigned long now) {
   if (!powerOn) return;
 
-  // Термоконтроль
   #ifdef TEMP_CONTROL_ENABLED
     if (temperature >= TEMP_MAX) {
       targetPWM = 0;
@@ -36,7 +34,6 @@ void safety_check(unsigned long now, float temperature,
     }
   #endif
 
-  // Контроль наклона
   #if defined(TILT_SENSOR_MPU6050) || defined(TILT_SENSOR_ADXL345)
     float ax = 0, ay = 0;
     tilt_sensor_read(ax, ay);
@@ -45,10 +42,7 @@ void safety_check(unsigned long now, float temperature,
                   (ay > TILT_ANGLE_RIGHT)   || (ay < -TILT_ANGLE_LEFT);
 
     if (tilted && !tiltShutdown) {
-      if (!tiltActive) {
-        tiltStart = now;
-        tiltActive = true;
-      }
+      if (!tiltActive) { tiltStart = now; tiltActive = true; }
       if (now - tiltStart >= TILT_TIMEOUT_MS) {
         tiltShutdown = true;
         targetPWM = 0;

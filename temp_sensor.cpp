@@ -1,5 +1,5 @@
-#include "temp_sensor.h"
 #include <Arduino.h>
+#include "temp_sensor.h"
 
 #ifdef TEMP_SENSOR_DS18B20
   OneWire oneWire(PIN_ONE_WIRE);

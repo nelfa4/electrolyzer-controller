@@ -1,5 +1,5 @@
-#include "tilt_sensor.h"
 #include <Arduino.h>
+#include "tilt_sensor.h"
 
 #ifdef TILT_SENSOR_MPU6050
   Adafruit_MPU6050 mpu;

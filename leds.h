@@ -4,8 +4,7 @@
 
 #ifdef USE_LEDS
 void leds_init();
-void leds_update(unsigned long now, float currentPWM,
-                 bool powerOn, bool tiltShutdown, float temperature);
+void leds_update(unsigned long now);
 #endif
 
 #endif

@@ -3,7 +3,6 @@
 #include "config.h"
 
 void safety_init();
-void safety_check(unsigned long now, float temperature,
-                  bool powerOn, bool powerSave,
-                  bool &tiltShutdown, float &targetPWM);
+void safety_check(unsigned long now);
+
 #endif

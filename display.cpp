@@ -1,5 +1,6 @@
-#include "display.h"
 #include <Arduino.h>
+#include "display.h"
+#include "globals.h"
 
 #ifdef DISPLAY_ENABLED
 
@@ -8,7 +9,6 @@ TFT_eSPI disp = TFT_eSPI();
 #define COLOR_BG      TFT_BLACK
 #define COLOR_TEXT    TFT_WHITE
 #define COLOR_OK      TFT_GREEN
-#define COLOR_WARN    TFT_YELLOW
 #define COLOR_ERR     TFT_RED
 #define COLOR_INFO    TFT_CYAN
 #define COLOR_BAR     TFT_DARKGREY
@@ -24,18 +24,13 @@ void display_init() {
   disp.println("v" FW_VERSION);
 }
 
-void display_update(unsigned long now,
-                    float voltage, float current, float powerW,
-                    float temperature, float gasOutput,
-                    float currentPWM, bool powerOn, bool powerSave,
-                    bool tiltShutdown) {
+void display_update(unsigned long now) {
   disp.fillScreen(COLOR_BG);
   disp.setTextSize(2);
 
   int y = 2;
   int rowH = disp.fontHeight() + 2;
 
-  // 1. Статус
   disp.setCursor(0, y);
   disp.setTextColor(COLOR_TEXT, COLOR_BG);
   if (!powerOn) {
@@ -44,7 +39,7 @@ void display_update(unsigned long now,
     disp.setTextColor(COLOR_ERR, COLOR_BG);
     disp.print("! TILT STOP !");
   }
-  #ifdef TEMP_MAX
+  #ifdef TEMP_CONTROL_ENABLED
   else if (temperature >= TEMP_MAX) {
     disp.setTextColor(COLOR_ERR, COLOR_BG);
     disp.print("! OVERHEAT !");
@@ -58,31 +53,29 @@ void display_update(unsigned long now,
   }
   y += rowH;
 
-  // 2. V, I
   disp.setTextColor(COLOR_TEXT, COLOR_BG);
   disp.setCursor(0, y);
   disp.print("V:"); disp.print(voltage, 1); disp.print("V");
   disp.print(" I:"); disp.print(current, 2); disp.print("A");
   y += rowH;
 
-  // 3. P, Gas
   disp.setCursor(0, y);
   disp.print("P:"); disp.print(powerW, 1); disp.print("W");
   disp.print(" G:"); disp.print(gasOutput, 0); disp.print("ml");
   y += rowH;
 
-  // 4. Температура
   disp.setCursor(0, y);
-  #ifdef TEMP_CRITICAL
-  if (temperature > TEMP_CRITICAL)
-    disp.setTextColor(COLOR_ERR, COLOR_BG);
-  else
-  #endif
+  #ifdef TEMP_CONTROL_ENABLED
+    if (temperature > TEMP_CRITICAL)
+      disp.setTextColor(COLOR_ERR, COLOR_BG);
+    else
+      disp.setTextColor(COLOR_TEXT, COLOR_BG);
+  #else
     disp.setTextColor(COLOR_TEXT, COLOR_BG);
+  #endif
   disp.print("T:"); disp.print(temperature, 1); disp.print("C");
   y += rowH;
 
-  // 5. Шкала ШИМ
   disp.setTextColor(COLOR_TEXT, COLOR_BG);
   disp.setCursor(0, y);
   disp.print("PWM:");

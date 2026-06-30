@@ -2,5 +2,5 @@
 #define GAS_CALC_H
 #include "config.h"
 
-void gas_calculate(float current, float voltage, float temperature, float &gasOutput);
+void gas_calculate(float cur, float volt, float temp, float &gas);
 #endif

@@ -1,5 +1,5 @@
-#include "current_sensor.h"
 #include <Arduino.h>
+#include "current_sensor.h"
 
 #ifdef CURRENT_SENSOR_INA226
   INA226 ina226(0x40);

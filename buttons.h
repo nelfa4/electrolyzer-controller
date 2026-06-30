@@ -5,7 +5,4 @@
 void buttons_init();
 void buttons_read(unsigned long now);
 
-extern bool powerOn;
-extern bool powerSave;
-extern float targetPWM;
 #endif
