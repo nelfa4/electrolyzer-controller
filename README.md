@@ -428,8 +428,8 @@ Important: TFT_eSPI requires configuring User_Setup.h with your pinout.
     ├── display.h / display.cpp       # TFT display
     ├── current_sensor.h / .cpp       # INA226/INA219/ACS712
     ├── temp_sensor.h / .cpp          # DS18B20/DHT22/NTC
-    └── tilt_sensor.h / .cpp          # MPU6050/ADXL345
-
+    ├── tilt_sensor.h / .cpp          # MPU6050/ADXL345
+    └── globals.h / .cpp              # variables
 ---
 
 ## Adding New Sensors
